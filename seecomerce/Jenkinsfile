@@ -88,7 +88,7 @@ pipeline {
                 echo "Sending HTTP GET requests to Web Service port ${env.WEB_PORT}..."
                 
                 // Verify frontend Nginx is active and serving HTML
-                sh "curl -f -s http://localhost:${env.WEB_PORT} | grep -q 'SeeCommerce'"
+                sh "curl -f -s http://host.docker.internal:${env.WEB_PORT} | grep -q 'SeeCommerce'"
                 
                 echo '✓ Smoke test passed! Application is responsive and serving pages.'
             }
