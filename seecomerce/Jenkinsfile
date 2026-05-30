@@ -27,7 +27,7 @@ pipeline {
                 sh 'docker compose config -q'
                 
                 echo 'Validating Dockerfile multi-stage layers...'
-                sh 'grep -q "FROM nginx" Dockerfile'
+                sh 'grep -q "FROM node" Dockerfile'
                 
                 echo '✓ Linting successful. Configuration verified.'
             }
