@@ -151,7 +151,7 @@ function renderProducts(productsList) {
                 </div>
             </div>
             <div class="product-footer">
-                <span class="product-price">$${prod.price.toFixed(2)}</span>
+                <span class="product-price">Rs. ${prod.price.toFixed(2)}</span>
                 <button class="btn-add-cart" onclick="addToCart(${prod.id})">Add to Cart</button>
             </div>
         </div>
@@ -190,7 +190,7 @@ function updateCart() {
     const totalAmount = cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
 
     cartCount.textContent = totalCount;
-    cartSubtotal.textContent = `$${totalAmount.toFixed(2)}`;
+    cartSubtotal.textContent = `Rs. ${totalAmount.toFixed(2)}`;
 
     // Customize checkout button style and label based on session auth
     if (!currentUser) {
@@ -215,7 +215,7 @@ function updateCart() {
                 <span class="item-name">${item.product.name}</span>
                 <span class="item-pricing">
                     <span class="item-qty">x${item.quantity}</span>
-                    <span class="item-price">$${(item.product.price * item.quantity).toFixed(2)}</span>
+                    <span class="item-price">Rs. ${(item.product.price * item.quantity).toFixed(2)}</span>
                 </span>
             </div>
         `).join('');
@@ -347,7 +347,7 @@ btnCheckout.addEventListener("click", async () => {
                 });
             }
 
-            alert(`🎉 Order Committed Successfully!\nTransaction ID: #${data.orderId}\nAmount charged: $${totalAmount.toFixed(2)}\n\nOpen the DevOps Telemetry drawer to inspect the real SQL transaction and Cache Eviction!`);
+            alert(`🎉 Order Committed Successfully!\nTransaction ID: #${data.orderId}\nAmount charged: Rs. ${totalAmount.toFixed(2)}\n\nOpen the DevOps Telemetry drawer to inspect the real SQL transaction and Cache Eviction!`);
             
             // Clear cart
             cart = [];
