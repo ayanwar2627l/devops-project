@@ -1,0 +1,85 @@
+services:
+  # ==========================================
+  # SERVICE 1: Storefront Nginx Web App (Custom Built)
+  # ==========================================
+  seecommerce-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: seecommerce_web
+    ports:
+      - "8085:80"
+    networks:
+      - shop-front-net
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      redis-cache:
+        condition: service_healthy
+    restart: always
+
+  # ==========================================
+  # SERVICE 2: PostgreSQL Relational Database (Docker Hub)
+  # ==========================================
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: seecommerce_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=seecommerce
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=seecomercepass123
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+      # Mount initialization seed schema to be run on container startup
+      - ./db-init.sql:/docker-entrypoint-initdb.d/db-init.sql:ro
+    networks:
+      - shop-front-net
+      - shop-back-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d seecommerce"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  # ==========================================
+  # SERVICE 3: Redis Cache Caching Layer (Docker Hub)
+  # ==========================================
+  redis-cache:
+    image: redis:7-alpine
+    container_name: seecommerce_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - shop-front-net
+      - shop-back-net
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+# ==========================================
+# NETWORKS: Bridge isolation layers
+# ==========================================
+networks:
+  # shop-front-net links the client web application to cache and databases
+  shop-front-net:
+    driver: bridge
+  # shop-back-net locks database & caching storage behind isolated sub-nets
+  shop-back-net:
+    driver: bridge
+
+# ==========================================
+# VOLUMES: Persistent volume definitions
+# ==========================================
+volumes:
+  pg-data:
+    driver: local
+  redis-data:
+    driver: local

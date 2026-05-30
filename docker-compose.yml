@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # FRONTEND: Static Nginx Learning Academy
+  # ==========================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: academy_frontend
+    ports:
+      - "8080:80"
+    networks:
+      - frontend-net
+    restart: always
+
+  # ==========================================
+  # BACKEND: Express API (stress endpoint + metrics)
+  # ==========================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: academy_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - REDIS_URL=redis://redis-cache:6379
+    networks:
+      - frontend-net
+      - backend-net
+    depends_on:
+      - redis-cache
+    # ----------------------------------------------------
+    # CONTROL GROUPS (cgroups) RESOURCE LIMITS DEMONSTRATION
+    # ----------------------------------------------------
+    deploy:
+      resources:
+        limits:
+          memory: 200M   # Strict memory limit to let OOM-killer trigger easily
+          cpus: '0.50'   # Limit to half a CPU core
+    mem_limit: 200m     # Legacy/v1 Compose support compatibility
+    restart: always
+
+  # ==========================================
+  # REDIS: Isolated caching layer
+  # ==========================================
+  redis-cache:
+    image: redis:7-alpine
+    container_name: academy_redis
+    networks:
+      - backend-net
+    volumes:
+      - redis-data:/data
+    restart: always
+
+# ==========================================
+# NETWORKS DEFINITION (Service Isolation)
+# ==========================================
+networks:
+  # frontend-net enables communication between Nginx browser triggers and Express API
+  frontend-net:
+    driver: bridge
+  # backend-net completely isolates Redis, making it inaccessible from frontend Nginx container
+  backend-net:
+    driver: bridge
+
+# ==========================================
+# VOLUMES DEFINITION (Data Persistence)
+# ==========================================
+volumes:
+  # Persistent volume ensuring cache data (like hits) survives container restarts
+  redis-data:
+    driver: local

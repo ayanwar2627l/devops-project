@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeeCommerce - Your Next-Gen Electronics Shop</title>
+    <!-- Google Fonts: Outfit & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for sleek icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Premium Ambient Background glows -->
+    <div class="bg-glow bg-glow-cyan"></div>
+    <div class="bg-glow bg-glow-indigo"></div>
+    <div class="bg-glow bg-glow-pink"></div>
+
+    <!-- 1. Sleek Top Navigation Bar -->
+    <nav class="shop-navbar">
+        <div class="nav-brand">
+            <i class="fa-solid fa-bag-shopping brand-logo-icon"></i>
+            <span class="brand-name">SeeCommerce</span>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="nav-link active">Home</a>
+            <a href="#" class="nav-link">Shop</a>
+            <a href="#" class="nav-link">Categories</a>
+            <a href="#" class="nav-link">Support</a>
+        </div>
+        <div class="nav-actions">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search catalog...">
+            </div>
+            <button class="nav-btn-action" id="auth-btn">
+                <i class="fa-solid fa-user-circle"></i>
+                <span id="auth-label">Sign In</span>
+            </button>
+            <button class="nav-btn-action cart-trigger" id="cart-btn">
+                <i class="fa-solid fa-shopping-basket"></i>
+                <span id="cart-count">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="shop-content-wrapper">
+        <!-- 2. Hero Interactive Banner -->
+        <header class="shop-hero">
+            <div class="hero-text-content">
+                <span class="hero-badge">Special Summer Drop</span>
+                <h1>Next-Gen Silicon.<br>Seamless Performance.</h1>
+                <p>Equip your workspace with our premium line of quantum devices, ANC audio hubs, and developer equipment.</p>
+                <div class="hero-actions">
+                    <button class="hero-primary-btn" onclick="scrollToCatalog()">Explore Catalog</button>
+                    <button class="hero-secondary-btn" id="btn-open-telemetry-hero">
+                        <i class="fa-solid fa-terminal"></i> View Live DevOps Logs
+                    </button>
+                </div>
+            </div>
+            <div class="hero-graphics">
+                <div class="glow-orb animated-float">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- 3. Core Store Layout -->
+        <main class="shop-grid-layout" id="catalog-section">
+            <!-- Left Side: Catalog Inventory -->
+            <section class="products-catalog-section">
+                <div class="catalog-header-bar">
+                    <h3>Available Products</h3>
+                    <div class="filter-pills">
+                        <button class="pill active">All</button>
+                        <button class="pill">Electronics</button>
+                        <button class="pill">Apparel</button>
+                        <button class="pill">Books</button>
+                    </div>
+                </div>
+                <div class="products-grid" id="products-catalog-grid">
+                    <!-- Loaded dynamically via app.js -->
+                </div>
+            </section>
+
+            <!-- Right Side: Compact Checkout Cart -->
+            <section class="shopping-cart-sidebar">
+                <div class="glass-panel" id="cart-panel">
+                    <div class="panel-header">
+                        <h3><i class="fa-solid fa-cart-shopping"></i> Shopping Cart</h3>
+                        <button class="clear-btn" id="btn-clear-cart"><i class="fa-solid fa-trash-can"></i> Clear All</button>
+                    </div>
+                    <div class="cart-items-list" id="cart-items-container">
+                        <p class="empty-msg">Your shopping cart is empty.</p>
+                    </div>
+                    <div class="cart-summary">
+                        <div class="summary-line">
+                            <span>Subtotal</span>
+                            <span id="cart-subtotal">$0.00</span>
+                        </div>
+                        <div class="summary-line highlight" style="display: none;">
+                            <span>Postgres SQL Bytes</span>
+                            <span id="sql-size-sim">0 bytes</span>
+                        </div>
+                        <button class="checkout-btn" id="btn-checkout">
+                            <i class="fa-solid fa-lock"></i> Please Sign In to Buy
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 4. Floating DevOps Debugger Drawer (Hidden by default, expandable) -->
+    <div class="devops-drawer-overlay" id="devops-drawer">
+        <div class="devops-drawer-card">
+            <div class="drawer-header">
+                <div class="drawer-brand">
+                    <i class="fa-solid fa-gears text-primary"></i>
+                    <h4>DevOps Telemetry & Logs Drawer</h4>
+                </div>
+                <button class="drawer-close-btn" id="btn-close-telemetry">&times;</button>
+            </div>
+            
+            <div class="drawer-body">
+                <!-- Stack services overview -->
+                <div class="drawer-section">
+                    <h5>Containers Status Monitor</h5>
+                    <div class="mini-services-monitor">
+                        <div class="mini-service-badge">
+                            <span class="status-dot pulsing success"></span>
+                            <span>seecommerce-web:8085</span>
+                        </div>
+                        <div class="mini-service-badge">
+                            <span class="status-dot success"></span>
+                            <span>postgres-db:5432</span>
+                        </div>
+                        <div class="mini-service-badge">
+                            <span class="status-dot success"></span>
+                            <span>redis-cache:6379</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live query and log logs console -->
+                <div class="drawer-section flex-grow">
+                    <h5>Live Postgres & Redis Caching Logs</h5>
+                    <div class="log-console" id="db-logs-console">
+                        <div class="log-line text-system">[SYSTEM] Telemetry attached. Awaiting e-commerce inputs...</div>
+                        <div class="log-line text-postgres">[POSTGRES] Connected on port 5432. Active catalog synced.</div>
+                        <div class="log-line text-redis">[REDIS] Listening on port 6379, ready to cache user session logs.</div>
+                    </div>
+                </div>
+
+                <!-- Declarative CI/CD pipeline simulation -->
+                <div class="drawer-section">
+                    <h5>Jenkins CI/CD Pipeline Simulator</h5>
+                    <div class="jenkins-stages-container">
+                        <div class="pipeline-progress-bar">
+                            <div class="pipeline-progress-fill" id="pipeline-fill"></div>
+                        </div>
+                        
+                        <div class="jenkins-stage-step" id="stage-checkout">
+                            <div class="stage-dot"><i class="fa-solid fa-code-branch"></i></div>
+                            <div class="stage-info">
+                                <h6>Stage 1: Lint Code</h6>
+                                <span class="stage-status-text">Pending</span>
+                            </div>
+                        </div>
+                        
+                        <div class="jenkins-stage-step" id="stage-build">
+                            <div class="stage-dot"><i class="fa-solid fa-hammer"></i></div>
+                            <div class="stage-info">
+                                <h6>Stage 2: Build Nginx Image</h6>
+                                <span class="stage-status-text">Pending</span>
+                            </div>
+                        </div>
+
+                        <div class="jenkins-stage-step" id="stage-test">
+                            <div class="stage-dot"><i class="fa-solid fa-vial"></i></div>
+                            <div class="stage-info">
+                                <h6>Stage 3: Integration Checks</h6>
+                                <span class="stage-status-text">Pending</span>
+                            </div>
+                        </div>
+
+                        <div class="jenkins-stage-step" id="stage-deploy">
+                            <div class="stage-dot"><i class="fa-solid fa-circle-play"></i></div>
+                            <div class="stage-info">
+                                <h6>Stage 4: Compose Deploy</h6>
+                                <span class="stage-status-text">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-jenkins" id="btn-trigger-jenkins" style="margin-top: 10px;">
+                        <i class="fa-solid fa-play"></i> Trigger Jenkins CI/CD Pipeline
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Toggle Button for DevOps Drawer -->
+    <button class="floating-telemetry-btn" id="btn-toggle-telemetry" title="Toggle DevOps Logs Drawer">
+        <i class="fa-solid fa-terminal"></i>
+        <span>DevOps Telemetry</span>
+    </button>
+
+    <!-- Sleek Glassmorphic Login Modal -->
+    <div class="modal-overlay" id="login-modal-overlay">
+        <div class="login-modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-lock-open text-primary"></i> SeeCommerce Sign In Gateway</h3>
+                <button class="modal-close-btn" id="btn-close-login">&times;</button>
+            </div>
+            <form class="login-form" id="login-form-submit">
+                <div class="form-input-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" value="admin@seecommerce.com" required placeholder="name@domain.com">
+                </div>
+                <div class="form-input-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" value="seecomerce123" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="submit-auth-btn">
+                    <i class="fa-solid fa-right-to-bracket"></i> Authenticate & Log In
+                </button>
+            </form>
+            <div class="modal-footer-hint">
+                <i class="fa-solid fa-shield-halved"></i> Secured connection to <code>postgres-db</code> users database.
+            </div>
+        </div>
+    </div>
+
+    <!-- Main javascript file -->
+    <script src="app.js"></script>
+    <script>
+        function scrollToCatalog() {
+            document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

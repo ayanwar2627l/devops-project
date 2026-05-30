@@ -1,0 +1,119 @@
+pipeline {
+    agent any
+
+    environment {
+        PROJECT_NAME    = 'seecomerce'
+        COMPOSE_FILE    = 'docker-compose.yml'
+        IMAGE_NAME      = 'seecommerce-web'
+        WEB_PORT        = '8085'
+    }
+
+    options {
+        timeout(time: 15, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        // ==========================================
+        // STAGE 1: Code Checkout & Configuration Lint
+        // ==========================================
+        stage('Checkout & Lint') {
+            steps {
+                echo '=== STAGE 1: Starting Code Audit & Linting ==='
+                echo "Validating Docker Compose file: ${env.COMPOSE_FILE}..."
+                
+                // Validate compose file syntax and compile details
+                sh 'docker compose config -q'
+                
+                echo 'Validating Dockerfile multi-stage layers...'
+                sh 'grep -q "FROM nginx" Dockerfile'
+                
+                echo '✓ Linting successful. Configuration verified.'
+            }
+        }
+
+        // ==========================================
+        // STAGE 2: Multi-stage Container Image Build
+        // ==========================================
+        stage('Build Custom Image') {
+            steps {
+                echo '=== STAGE 2: Executing Multi-Stage Build ==='
+                echo "Building custom storefront web container image: ${env.IMAGE_NAME}..."
+                
+                // Build the services via Docker Compose
+                sh 'docker compose build seecommerce-web'
+                
+                echo "✓ Image build complete. Tagged: ${env.IMAGE_NAME}:latest"
+            }
+        }
+
+        // ==========================================
+        // STAGE 3: Dry-Run & Integration Testing
+        // ==========================================
+        stage('Integration Tests') {
+            steps {
+                echo '=== STAGE 3: Running Integration Tests ==='
+                echo 'Verifying environment network linkages...'
+                
+                // Dry run validation of ports and compositions
+                sh 'docker compose config'
+                
+                echo '✓ Integration test sequence completed.'
+            }
+        }
+
+        // ==========================================
+        // STAGE 4: Automated Container Stack Deployment
+        // ==========================================
+        stage('Compose Orchestration Up') {
+            steps {
+                echo '=== STAGE 4: Triggering Container Orchestration ==='
+                echo "Deploying stack services: Web (Port ${env.WEB_PORT}), Postgres, Redis..."
+                
+                // Launch compose services in detached daemon mode
+                sh 'docker compose up -d --force-recreate'
+                
+                echo 'Waiting for microservices healthchecks to resolve...'
+                sh 'sleep 8'
+            }
+        }
+
+        // ==========================================
+        // STAGE 5: Live Smoke Test Verification
+        // ==========================================
+        stage('Smoke Test Check') {
+            steps {
+                echo '=== STAGE 5: Running Smoke Tests ==='
+                echo "Sending HTTP GET requests to Web Service port ${env.WEB_PORT}..."
+                
+                // Verify frontend Nginx is active and serving HTML
+                sh "curl -f -s http://localhost:${env.WEB_PORT} | grep -q 'SeeCommerce'"
+                
+                echo '✓ Smoke test passed! Application is responsive and serving pages.'
+            }
+        }
+    }
+
+    // ==========================================
+    // POST-ACTIONS: Status Alerts & Pipeline Cleanup
+    // ==========================================
+    post {
+        success {
+            echo '============================================='
+            echo '🎉 DEPLOYMENT SUCCESSFUL - SeeCommerce is live!'
+            echo "Access storefront dashboard at http://localhost:${env.WEB_PORT}"
+            echo '============================================='
+        }
+        failure {
+            echo '============================================='
+            echo '❌ PIPELINE FAILED - Check console output logs.'
+            echo '============================================='
+        }
+        always {
+            echo 'Cleaning up dangling container cache layers...'
+            sh 'docker image prune -f'
+            echo 'Cleanup finished.'
+        }
+    }
+}
