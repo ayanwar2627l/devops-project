@@ -33,6 +33,24 @@ const btnToggleTelemetry = document.getElementById("btn-toggle-telemetry");
 const btnCloseTelemetry = document.getElementById("btn-close-telemetry");
 const btnOpenTelemetryHero = document.getElementById("btn-open-telemetry-hero");
 
+// Navbar Cart Button Scroll Trigger
+const cartBtn = document.getElementById("cart-btn");
+if (cartBtn) {
+    cartBtn.addEventListener("click", () => {
+        const cartPanel = document.getElementById("cart-panel");
+        if (cartPanel) {
+            cartPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+            // Apply temporary glowing visual alert
+            cartPanel.style.boxShadow = "0 0 35px rgba(99, 102, 241, 0.7)";
+            cartPanel.style.borderColor = "var(--primary)";
+            setTimeout(() => {
+                cartPanel.style.boxShadow = "";
+                cartPanel.style.borderColor = "";
+            }, 1500);
+        }
+    });
+}
+
 // Jenkins Pipeline DOM Elements
 const btnTriggerJenkins = document.getElementById("btn-trigger-jenkins");
 const pipelineFill = document.getElementById("pipeline-fill");
