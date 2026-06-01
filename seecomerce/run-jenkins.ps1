@@ -1,8 +1,6 @@
 # ==============================================================================
 # run-jenkins.ps1 - SeeCommerce DevOps Automation Script
-# ==============================================================================
 # Helper script to launch local Jenkins container linked to your Docker Desktop daemon.
-# ==============================================================================
 
 Write-Host "" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan

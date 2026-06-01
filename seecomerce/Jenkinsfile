@@ -15,9 +15,9 @@ pipeline {
     }
 
     stages {
-        // ==========================================
+        
         // STAGE 1: Code Checkout & Configuration Lint
-        // ==========================================
+        
         stage('Checkout & Lint') {
             steps {
                 echo '=== STAGE 1: Starting Code Audit & Linting ==='
@@ -33,9 +33,9 @@ pipeline {
             }
         }
 
-        // ==========================================
+        
         // STAGE 2: Multi-stage Container Image Build
-        // ==========================================
+        
         stage('Build Custom Image') {
             steps {
                 echo '=== STAGE 2: Executing Multi-Stage Build ==='
@@ -44,13 +44,13 @@ pipeline {
                 // Build the services via Docker Compose
                 sh 'docker compose build seecommerce-web'
                 
-                echo "✓ Image build complete. Tagged: ${env.IMAGE_NAME}:latest"
+                echo " Image build complete. Tagged: ${env.IMAGE_NAME}:latest"
             }
         }
 
-        // ==========================================
+        
         // STAGE 3: Dry-Run & Integration Testing
-        // ==========================================
+        
         stage('Integration Tests') {
             steps {
                 echo '=== STAGE 3: Running Integration Tests ==='
@@ -59,13 +59,13 @@ pipeline {
                 // Dry run validation of ports and compositions
                 sh 'docker compose config'
                 
-                echo '✓ Integration test sequence completed.'
+                echo 'Integration test sequence completed.'
             }
         }
 
-        // ==========================================
+        
         // STAGE 4: Automated Container Stack Deployment
-        // ==========================================
+        
         stage('Compose Orchestration Up') {
             steps {
                 echo '=== STAGE 4: Triggering Container Orchestration ==='
@@ -79,9 +79,9 @@ pipeline {
             }
         }
 
-        // ==========================================
+        
         // STAGE 5: Live Smoke Test Verification
-        // ==========================================
+        
         stage('Smoke Test Check') {
             steps {
                 echo '=== STAGE 5: Running Smoke Tests ==='
@@ -90,25 +90,22 @@ pipeline {
                 // Verify frontend Nginx is active and serving HTML
                 sh "curl -f -s http://host.docker.internal:${env.WEB_PORT} | grep -q 'SeeCommerce'"
                 
-                echo '✓ Smoke test passed! Application is responsive and serving pages.'
+                echo ' Smoke test passed! Application is responsive and serving pages.'
             }
         }
     }
 
-    // ==========================================
+    
     // POST-ACTIONS: Status Alerts & Pipeline Cleanup
-    // ==========================================
+    
     post {
         success {
-            echo '============================================='
-            echo '🎉 DEPLOYMENT SUCCESSFUL - SeeCommerce is live!'
+            
+            echo ' DEPLOYMENT SUCCESSFUL - SeeCommerce is live!'
             echo "Access storefront dashboard at http://localhost:${env.WEB_PORT}"
-            echo '============================================='
         }
         failure {
-            echo '============================================='
-            echo '❌ PIPELINE FAILED - Check console output logs.'
-            echo '============================================='
+            echo ' PIPELINE FAILED - Check console output logs.'
         }
         always {
             echo 'Cleaning up dangling container cache layers...'

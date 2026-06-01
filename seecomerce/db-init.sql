@@ -1,6 +1,4 @@
--- ==========================================
 -- Database schema for SeeCommerce database
--- ==========================================
 
 CREATE TABLE IF NOT EXISTS categories (
     id SERIAL PRIMARY KEY,
@@ -36,9 +34,7 @@ CREATE TABLE IF NOT EXISTS order_items (
     price DECIMAL(10, 2) NOT NULL
 );
 
--- ==========================================
 -- Seed Initial Sample Catalog
--- ==========================================
 
 INSERT INTO categories (name) VALUES 
 ('Electronics'), 

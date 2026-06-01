@@ -1,15 +1,11 @@
-# ==========================================
 # STAGE 1: Dependency builder
-# ==========================================
 FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 # Install production dependencies only
 RUN npm install --only=production
 
-# ==========================================
 # STAGE 2: Lightweight Production Runner
-# ==========================================
 FROM node:18-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production

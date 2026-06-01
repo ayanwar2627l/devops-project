@@ -10,9 +10,7 @@ app.use(express.json());
 // Serve static client assets directly
 app.use(express.static(__dirname));
 
-// ==========================================
 // DATABASE & CACHE CONNECTIONS
-// ==========================================
 
 // Postgres Pool Connection (linked to compost service postgres-db)
 const pgPool = new Pool({
@@ -45,9 +43,9 @@ async function connectServices() {
 }
 connectServices();
 
-// ==========================================
+
 // API ENDPOINTS
-// ==========================================
+
 
 // 1. Fetch Products Catalog (with Redis Caching Layer)
 app.get('/api/products', async (req, res) => {

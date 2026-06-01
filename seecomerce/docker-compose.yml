@@ -1,7 +1,5 @@
 services:
-  # ==========================================
   # SERVICE 1: Storefront Nginx Web App (Custom Built)
-  # ==========================================
   seecommerce-web:
     build:
       context: .
@@ -18,9 +16,7 @@ services:
         condition: service_healthy
     restart: always
 
-  # ==========================================
   # SERVICE 2: PostgreSQL Relational Database (Docker Hub)
-  # ==========================================
   postgres-db:
     image: postgres:15-alpine
     container_name: seecommerce_postgres
@@ -44,9 +40,7 @@ services:
       retries: 5
     restart: always
 
-  # ==========================================
   # SERVICE 3: Redis Cache Caching Layer (Docker Hub)
-  # ==========================================
   redis-cache:
     image: redis:7-alpine
     container_name: seecommerce_redis
@@ -64,9 +58,7 @@ services:
       retries: 5
     restart: always
 
-# ==========================================
 # NETWORKS: Bridge isolation layers
-# ==========================================
 networks:
   # shop-front-net links the client web application to cache and databases
   shop-front-net:
@@ -75,9 +67,7 @@ networks:
   shop-back-net:
     driver: bridge
 
-# ==========================================
 # VOLUMES: Persistent volume definitions
-# ==========================================
 volumes:
   pg-data:
     driver: local
