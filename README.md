@@ -12,7 +12,6 @@ Rather than just reading slides, you will explore these concepts through a **mul
 Devops project/
 ├── README.md                   # You are here! Startup guide and overview
 ├── docker-compose.yml          # Connects Frontend, Backend, and Redis in a multi-container stack
-│
 ├── frontend/                   # Premium Interactive Visual Academy UI
 │   ├── index.html              # Glassmorphic visual structure
 │   ├── styles.css              # Custom animations and dark-mode styling

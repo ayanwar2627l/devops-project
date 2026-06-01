@@ -1,9 +1,7 @@
 version: '3.8'
 
 services:
-  # ==========================================
-  # FRONTEND: Static Nginx Learning Academy
-  # ==========================================
+  # FRONTEND: Static Nginx 
   frontend:
     build:
       context: ./frontend
@@ -15,9 +13,7 @@ services:
       - frontend-net
     restart: always
 
-  # ==========================================
   # BACKEND: Express API (stress endpoint + metrics)
-  # ==========================================
   backend:
     build:
       context: ./backend
@@ -33,9 +29,7 @@ services:
       - backend-net
     depends_on:
       - redis-cache
-    # ----------------------------------------------------
     # CONTROL GROUPS (cgroups) RESOURCE LIMITS DEMONSTRATION
-    # ----------------------------------------------------
     deploy:
       resources:
         limits:
@@ -44,9 +38,7 @@ services:
     mem_limit: 200m     # Legacy/v1 Compose support compatibility
     restart: always
 
-  # ==========================================
   # REDIS: Isolated caching layer
-  # ==========================================
   redis-cache:
     image: redis:7-alpine
     container_name: academy_redis
@@ -56,9 +48,7 @@ services:
       - redis-data:/data
     restart: always
 
-# ==========================================
 # NETWORKS DEFINITION (Service Isolation)
-# ==========================================
 networks:
   # frontend-net enables communication between Nginx browser triggers and Express API
   frontend-net:
@@ -66,10 +56,7 @@ networks:
   # backend-net completely isolates Redis, making it inaccessible from frontend Nginx container
   backend-net:
     driver: bridge
-
-# ==========================================
 # VOLUMES DEFINITION (Data Persistence)
-# ==========================================
 volumes:
   # Persistent volume ensuring cache data (like hits) survives container restarts
   redis-data:
